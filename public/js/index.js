@@ -33,7 +33,7 @@ $('#message-form').on('submit', function(e) {
     from: 'User',
     text: $('[name=message]').val()
   }, function() {
-
+    $('[name=message]').val('');
   });
 });
 
@@ -42,12 +42,16 @@ locationBtn.on('click', function() {
     return alert('Geolocation is not supperted by your browser');
   }
 
+  locationBtn.attr('disabled', 'disabled').text('Sending...');
+
   navigator.geolocation.getCurrentPosition(function(position) {
     socket.emit('createLocationMessage', {
       lat: position.coords.latitude,
       lng: position.coords.longitude
     });
+    locationBtn.removeAttr('disabled').text('Send Location');
   }, function() {
     alert('Unable to fetch current position');
+    locationBtn.removeAttr('disabled').text('Send Location');
   });
 });
